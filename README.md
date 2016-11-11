@@ -49,7 +49,38 @@ int *q = (int*)realloc(p, 10*sizeof(int));
 ```c
 int *a = (int*)malloc(512);
 free(a);  
-```
+```  
+# HEAP MEMORY   
+
+
+### CẤP PHÁT  
+
+
+- Heap là một vùng nhớ rất rộng có sẵn để chương trình sử dụng. Chương trình có thể yêu cầu vùng hoặc khối nhớ để nó sử dụng ở trong heap. Để cấp phát một khối nhớ, chương trình làm yêu cầu minh bạch gọi hàm cấp phát của heap. Hàm cấp phát sẽ để riêng một khối nhớ vừa được yêu cầu kích cở trong heap và trả về con trỏ trỏ vào nó. Giả sủ chương trình làm ba cấp phát yêu cầu cấp phát động , tổ chức nó riêng biệt để lưu trữ ảnh GIF trong heap , mỗi kích cỡ là 1024 bytes. Sau khi yêu cầu cấp phát, bộ nhớ được nhìn như thế này :  
+![](http://3.bp.blogspot.com/-Az6dYqNmWD4/Vnkexr35piI/AAAAAAAABE0/9njFUzxIOeM/s1600/allocation%2Bin%2Bheap.PNG)  
+- Mỗi cấp phát yêu cầu dành riêng một vùng nhớ liên tục với kích cỡ được yêu cầu trong heap và trả về con trỏ trỏ đến khỗi nhớ đó cho chương trình. Bởi vì khỗi này luôn được trỏ bởi con trỏ.  
+- Trong ví dụ trên, ba khối được cấp phát LIÊN TỤC TỪ PHÍA DƯỚI của bộ nhớ heap và mỗi khối là 1024 byte như kích cỡ được yêu cầu. Trên thực tế quản lý heap "heap manager" có thể cấp phát khối nhớ bất cứ nơi nào nó muốn trong heap miễn là những khối không chồng chéo lên nhau và có ít nhất một yêu cầu có kích cỡ. Tại một vài thời điểm cụ thể, một vài vùng trong heap đã được cấp phát cho chương trình , vì vậy nó được coi là đang sử dụng "in use". Vài vùng khác chưa được ủy thác nên nó được coi là tự do "free" và có sãn để đáp ứng cho yêu cầu cấp phát. Quản lý vùng nhớ heap tự có riêng của mình câu trúc dữ liệu private "private data structures " để ghi lại đâu là vùng nhớ của heap đã được giao phó cho mục đích tại một vài thời điểm. Quản lý heap đáp ứng cho mỗi yêu cầu cấp phát thừ khối bộ nhớ đang tự do "free memory" sau đó cập nhật nó vào private dât structures để ghi nó lại là bộ nhớ đó đang trong sử dụng.
+
+### THU HỒI  
+- Khi chương trình đang sử dụng khối nhớ kết thúc, nó làm một yêu cầu thu hồi (deallocation) minh bạch để chỉ cho heap manager rằng chương trình đó đã kết thúc bây giờ với khối nhớ. Heap manager cập nhất private data structures của nó chỉ ra rằng vùng nhớ đã chiếm đóng đã free trở lại và vì vậy có thể tái sử dụng "re-used" để đáp ứng cho tính năng yêu cầu allocation. Đâu là những gì mà heap muốn thấy nếu chương trình deallocates khối thử hai của ba khối :  
+![](http://2.bp.blogspot.com/-p3WkPK-oALI/Vnke-GdeUPI/AAAAAAAABFA/zpXM6-RzqfM/s1600/deallocation%2Bin%2Bheap.PNG)  
+- Sau khi deallocation, con trỏ tiếp tục trỏ vào khối đã bị deallocated ngay lúc đó. Nhưng chương trình không được truy cập vào vùng nhớ đã bị deallocated. Đó là lý do tại sao con trỏ được vẽ màu xám - CON TRỎ VẪN Ở ĐÓ NHƯNG NÓ KHÔNG ĐƯỢC SỬ DỤNG. Thỉnh thoảng code sẽ đặt con trỏ trỏ tới NULL ngay tức thì sau khi deallocation được làm một cách minh bạch thực tế điều này khồn có giá trị.  
+
+
+### VD:  
+### Cấp phát một khối kiểu int trong heap, lưu số 42 vào trong khối đó, và sau đó deallocate nó 
+![](http://2.bp.blogspot.com/-R3KGqaNkIos/VnkfD5YLIHI/AAAAAAAABFQ/e_8-FEGxFOA/s1600/local%2Band%2Bheap%2BT1.PNG)   
+
+----
+![](http://2.bp.blogspot.com/-U7Ki58ncns8/VnkfDwyfLvI/AAAAAAAABFU/u5uMq5qyThQ/s1600/local%2Band%2Bheap%2BT2.PNG)  
+
+----
+![](http://1.bp.blogspot.com/-7-j400MYV1w/VnkfD3uquCI/AAAAAAAABFg/MMmV-snO2WQ/s1600/local%2Band%2Bheap%2BT3.PNG) 
+
+
+
+
+
 
 
 
